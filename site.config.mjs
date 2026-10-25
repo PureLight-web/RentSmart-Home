@@ -15,7 +15,7 @@ export const siteConfig = {
   accentColor: "#D4F56A",
   highlightColor: "#FF875F",
   googleAnalyticsId: "",
-  googleSiteVerification: "",
+  googleSiteVerification: "Pv7bKFPEFV_l3XeA4OkELT2pCQeoHfqz1hqzn5I-4w8",
   adsensePublisherId: "",
   defaultOgImage: "/images/og-default.svg",
   footerNote: "Small changes. More comfortable rentals.",
