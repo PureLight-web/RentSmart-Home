@@ -1,0 +1,21 @@
+---
+import { siteConfig } from '../../site.config.mjs';
+const year = new Date().getUTCFullYear();
+---
+<footer class="site-footer">
+  <div class="container footer-main">
+    <div class="footer-brand">
+      <a class="brand brand-light" href="/">
+        <span class="brand-mark" aria-hidden="true">{siteConfig.logoText}</span>
+        <span class="brand-name">{siteConfig.name}<small>{siteConfig.tagline}</small></span>
+      </a>
+      <p>{siteConfig.description}</p>
+    </div>
+    <div class="footer-links">
+      <div><strong>Explore</strong><a href="/topics/">All topics</a><a href="/search/">Search</a><a href="/about/">About us</a><a href="/contact/">Contact</a></div>
+      <div><strong>Our standards</strong><a href="/editorial-policy/">Editorial policy</a><a href="/sources/">Sources &amp; corrections</a><a href="/disclaimer/">Disclaimer</a></div>
+      <div><strong>Legal</strong><a href="/privacy/">Privacy policy</a><a href="/terms/">Terms of use</a><a href="/rss.xml">RSS feed</a></div>
+    </div>
+  </div>
+  <div class="container footer-bottom"><span>© {year} {siteConfig.name}. All rights reserved.</span><span>{siteConfig.footerNote}</span></div>
+</footer>
