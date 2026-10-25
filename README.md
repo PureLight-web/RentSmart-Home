@@ -7,7 +7,7 @@
 - Node.js 22; build command: `npm run build`; output directory: `dist`; root directory: repository root.
 - Articles: `src/content/articles/*.md`.
 - Branding/IDs/domain: `site.config.mjs`.
-- Canonical is currently set to `https://rentsmart-home.pages.dev`. Confirm the actual Pages project hostname and update this value before launch if different.
+- Canonical is set to the deployed Pages hostname `https://rentsmartideas.pages.dev`.
 
 ## Run locally
 ```powershell
@@ -44,7 +44,7 @@ Manufacturer ratings are model-specific. Never transfer a hook's weight limit to
 ## Before publishing / applying for ads
 
 ### Domain, Search Console and analytics
-- [ ] Confirm the deployed Pages hostname and/or attach the production custom domain.
+- [x] Confirm deployed Pages hostname: `https://rentsmartideas.pages.dev/`.
 - [ ] Add the domain to Google Search Console as a **Domain property** and verify by DNS TXT record at the domain's DNS provider. This step requires access to the domain's DNS settings.
 - [ ] Create one GA4 property and a single web data stream specifically for RentSmart Home; put its real `G-...` ID into `site.config.mjs`.
 - [ ] Link the GA4 property and Search Console property if available for the account, then verify measurements with real visits and the GA realtime report.
