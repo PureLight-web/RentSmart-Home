@@ -1,0 +1,21 @@
+---
+import { siteConfig } from '../../site.config.mjs';
+import { formatDate, slugify } from '../lib/site';
+const { article, compact = false } = Astro.props;
+const { data } = article;
+const slug = article.id;
+const categorySlug = slugify(data.category);
+const visualIndex = (slug.length % 4) + 1;
+---
+<article class:list={["article-card", { compact }]}>
+  <a class={`article-visual visual-${visualIndex}`} href={`/articles/${slug}/`} aria-label={`Read ${data.title}`}>
+    {data.heroImage ? <img src={data.heroImage} alt={data.heroImageAlt || ''} loading="lazy" /> : <span class="visual-art" aria-hidden="true"><i></i><i></i><i></i></span>}
+    <span class="visual-label">{data.category}</span>
+  </a>
+  <div class="article-card-body">
+    <div class="article-meta"><a href={`/category/${categorySlug}/`}>{data.category}</a><span aria-hidden="true">·</span><time datetime={data.pubDate.toISOString()}>{formatDate(data.pubDate)}</time></div>
+    <h3><a href={`/articles/${slug}/`}>{data.title}</a></h3>
+    <p>{data.description}</p>
+    <a class="read-link" href={`/articles/${slug}/`}>Read article <span aria-hidden="true">↗</span></a>
+  </div>
+</article>
