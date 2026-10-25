@@ -1,0 +1,15 @@
+---
+import BaseLayout from '../layouts/BaseLayout.astro';
+import { siteConfig } from '../../site.config.mjs';
+---
+<BaseLayout title="Privacy policy" description={`How ${siteConfig.name} handles website and contact information.`}>
+<section class="page-hero"><div class="container"><p class="section-kicker">Privacy</p><h1>Privacy policy.</h1><p>What may be processed when you visit this site, and what must be updated as services are enabled.</p></div></section>
+<section class="container content-section"><div class="prose"><p><strong>Review date: 25 October 2026.</strong> This is a practical starting point and must be checked against the actual hosting, analytics, advertising, affiliate and contact services before launch. It is not legal advice.</p>
+<h2>Hosting and technical logs</h2><p>The hosting or security provider may process technical information such as IP address, browser details, requested URLs and timestamps to deliver, protect and troubleshoot the site. Confirm the live provider's documentation and retention terms.</p>
+<h2>Analytics</h2><p>Google Analytics is not enabled while the measurement ID in the site configuration is blank. If GA4 is enabled later, update this notice to describe the actual setup, privacy controls, retention settings and consent requirements. Do not claim data collection that is not active.</p>
+<h2>Advertising and affiliate links</h2><p>Advertising scripts are not enabled while the publisher ID remains blank. If advertising or affiliate programmes are added, disclose the actual providers and describe cookies, identifiers, tracking, personalisation choices and relevant opt-outs. See our <a href="/affiliate-disclosure/">Affiliate Disclosure</a>.</p>
+<h2>Cookies and consent</h2><p>Some technical functions may use technologies needed to deliver or secure the site. Before enabling advertising or non-essential measurement for UK or EEA visitors, configure an appropriate Google-certified Consent Management Platform (CMP) and consent settings for the live services. A generic banner alone may not be sufficient.</p>
+<h2>Email and messages</h2><p>If you email us, we receive the information you choose to provide. A monitored contact email is not yet configured. Before launch, add the actual inbox, explain how messages are handled and retained, and publish a process for privacy requests.</p>
+<h2>External links and your choices</h2><p>Manufacturer, government, retailer and other third-party sites have their own privacy practices. Your rights depend on your location and applicable law. Requests about personal information should be directed to the published contact address once it is configured.</p>
+<h2>Changes</h2><p>Update this notice when the site's providers or data practices change. It should describe the live site rather than future plans.</p></div></section>
+</BaseLayout>
