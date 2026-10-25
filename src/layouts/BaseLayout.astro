@@ -77,12 +77,16 @@ const safeJson = (value) => JSON.stringify(value).replace(/</g, '\\u003c');
 
         const hasAdvertisingConsent = (detail) => {
           if (!detail) return false;
-          const categories = detail.categories || {};
-          const accepted = Array.isArray(detail.accepted) ? detail.accepted : [];
-          const granted = categories.advertisement === true || accepted.includes('advertisement');
-          const activeLaw = String(detail.activeLaw || '').toLowerCase();
-          if (activeLaw === 'gdpr' && detail.isUserActionCompleted !== true) return false;
-          return granted;
+
+          // CookieYes consent-update events provide accepted/rejected arrays.
+          // Its banner-load event provides boolean category values.
+          if (Array.isArray(detail.accepted)) {
+            return detail.accepted.includes('advertisement');
+          }
+          if (detail.categories && typeof detail.categories.advertisement === 'boolean') {
+            return detail.categories.advertisement === true;
+          }
+          return false;
         };
 
         const injectRentSmartAdMarkup = async (container, code) => {
@@ -112,11 +116,13 @@ const safeJson = (value) => JSON.stringify(value).replace(/</g, '\\u003c');
               if (!node.hasAttribute('async')) script.async = false;
               await new Promise((resolve) => {
                 let settled = false;
-                const finish = () => {
+                const timeout = window.setTimeout(finish, 10000);
+                function finish() {
                   if (settled) return;
                   settled = true;
+                  window.clearTimeout(timeout);
                   resolve();
-                };
+                }
                 script.addEventListener('load', finish, { once: true });
                 script.addEventListener('error', finish, { once: true });
                 container.appendChild(script);
