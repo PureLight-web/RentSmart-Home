@@ -69,5 +69,17 @@ const faqSchema = data.faqs?.length ? {
       </aside>
     </div>
   </section>
+  <script is:inline>
+    document.querySelectorAll('.article-prose table').forEach((table) => {
+      if (table.parentElement && table.parentElement.classList.contains('table-scroll')) return;
+      const wrapper = document.createElement('div');
+      wrapper.className = 'table-scroll';
+      wrapper.setAttribute('role', 'region');
+      wrapper.setAttribute('aria-label', 'Scrollable comparison table');
+      wrapper.setAttribute('tabindex', '0');
+      table.parentNode.insertBefore(wrapper, table);
+      wrapper.appendChild(table);
+    });
+  </script>
   {related.length > 0 && (<section class="container section-tight"><div class="section-head"><div><p class="section-kicker">Keep exploring</p><h2 class="section-title">Related reads</h2></div></div><div class="article-grid">{related.map((article) => <ArticleCard article={article} />)}</div></section>)}
 </BaseLayout>
