@@ -1,35 +1,28 @@
 # Adsterra slot code guide
 
-This folder holds the Adsterra publisher code snippets for RentSmart Home. Paste each code into its named file once; the shared AdSlot.astro component places it across the page templates.
+The Adsterra codes supplied for `https://rentsmartideas.pages.dev` are installed in the central slot files in this folder. The reusable `AdSlot.astro` component supplies them in the site templates; do not paste them into individual articles or pages.
 
-## How to activate a slot
+## Configured slots and placements
 
-1. In the Adsterra publisher dashboard, choose the RentSmart Home domain and add or choose the relevant approved ad unit.
-2. Open the matching file below.
-3. Delete the PASTE_ADSTERRA_CODE_HERE placeholder comment.
-4. Paste the complete code copied from Adsterra. Keep the script and its configuration intact.
-5. Commit and push to main. Cloudflare Pages will deploy the updated site.
-
-Do not paste ad code into each article, homepage, or category page. Once it is in the central file, the page placements reuse it automatically.
-
-## Slots and placements
-
-| Format | Paste code into | Where it appears |
+| Format | Code file | Where it appears |
 |---|---|---|
-| Native Banner (4:1 desktop layout) | native-banner.desktop.html | Homepage below hero; article pages below the title. Use native-banner.mobile.html for your mobile-specific native configuration. |
-| 468 x 60 | banner-468x60.desktop.html | Category page after the topic intro and before article cards; desktop/tablet only. |
-| 300 x 250 | banner-300x250.desktop.html and banner-300x250.mobile.html | Homepage mid-page, article page after content, and category listings after the third card (or after a short list). |
-| 160 x 300 | banner-160x300.desktop.html | Category sidebar on desktop; hidden on mobile. |
-| 160 x 600 | banner-160x600.desktop.html | Article sidebar on desktop; hidden on mobile. |
-| 320 x 50 | banner-320x50.mobile.html | Homepage mobile banner location. |
-| 728 x 90 | banner-728x90.desktop.html | Homepage desktop/tablet leaderboard location. |
+| Native Banner | `native-banner.desktop.html` | Responsive unit below the homepage hero and below article headings, on desktop and mobile. Only one native code is loaded for each page view. |
+| 468 × 60 | `banner-468x60.desktop.html` | Category page below the topic intro; desktop/tablet only. |
+| 300 × 250 | `banner-300x250.desktop.html` | Homepage mid-page, article page after content, and category listings after the third card (or after a short list); same fixed-size code adapts to the desktop/mobile slot width. |
+| 160 × 300 | `banner-160x300.desktop.html` | Category sidebar on desktop; hidden on mobile. |
+| 160 × 600 | `banner-160x600.desktop.html` | Article sidebar on desktop; hidden on mobile. |
+| 320 × 50 | `banner-320x50.mobile.html` | Homepage mobile banner location; mobile only. |
+| 728 × 90 | `banner-728x90.desktop.html` | Homepage leaderboard; desktop/tablet only. |
 
-## Notes
+Unused mobile-specific placeholder files are intentionally left blank where a single format code is used responsively. Do not duplicate the same Native or 300 × 250 code into both desktop and mobile files; doing so could create duplicate ad requests.
 
-- Adsterra codes are generated for a particular domain and ad unit. Use the code supplied for RentSmart Home; do not assume a code from another website can be reused.
-- Fixed-size display banners are not intrinsically responsive. CSS breakpoints show the desktop or mobile variant, following Adsterra's documented approach.
-- Desktop and mobile slots should use the suitable code/format for that device. If there is no mobile snippet, that size won't render on mobile.
-- Empty placeholders remain hidden; no blank ad boxes appear.
-- Keep ad density comfortable and avoid placing ads too close to navigation, links, or interactive controls.
-- This starter does not add popunders, social bars, push notifications, or full-screen overlays.
-- Test each placement on the deployed website in desktop and mobile browsers. Some units may need domain approval before they serve.
+## Consent and responsive loading
+
+- The code is kept as data in each slot and is not executed immediately by the browser.
+- The shared layout waits for CookieYes to report that the visitor has granted the **Advertisement** category before inserting Adsterra scripts.
+- For fixed desktop/mobile variants, only the code for the current viewport is inserted. The 468 × 60, 160 × 300, 160 × 600 and 728 × 90 units are desktop/tablet-only; the 320 × 50 unit is mobile-only.
+- If advertising consent is not granted, no Adsterra slot script is intentionally inserted. When consent is withdrawn, the visible creative is cleared; this cannot undo third-party requests or cookies already created before withdrawal.
+- Confirm in CookieYes that Advertisement is a separate optional category and that the banner uses the consent behavior appropriate to the visitor's region. Test Accept, Reject, and saved preferences in a private browser window.
+- Adsterra codes are site/unit-specific. Use only the publisher code supplied for this site, and test each placement on the deployed pages.
+
+This starter does not add popunders, social bars, push notifications, or full-screen overlays.
