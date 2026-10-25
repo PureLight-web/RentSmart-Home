@@ -9,7 +9,7 @@ const articles = defineCollection({
     description: z.string(),
     pubDate: z.coerce.date(),
     updatedDate: z.coerce.date().optional(),
-    category: z.string().default('General'),
+    category: z.string().default('Renter-Friendly Upgrades'),
     author: z.string().optional(),
     heroImage: z.string().optional(),
     heroImageAlt: z.string().optional(),
@@ -18,7 +18,7 @@ const articles = defineCollection({
     draft: z.boolean().default(false),
     seoTitle: z.string().optional(),
     noindex: z.boolean().default(false),
+    faqs: z.array(z.object({ question: z.string(), answer: z.string() })).default([]),
   }),
 });
-
 export const collections = { articles };
