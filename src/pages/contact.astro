@@ -1,0 +1,8 @@
+---
+import BaseLayout from '../layouts/BaseLayout.astro';
+import { siteConfig } from '../../site.config.mjs';
+---
+<BaseLayout title="Contact RentSmart Home" description="Contact RentSmart Home with factual corrections, product documentation and editorial feedback.">
+<section class="page-hero"><div class="container"><p class="section-kicker">Corrections and feedback</p><h1>Help us make a guide more useful.</h1><p>Share the article URL, the specific statement and the evidence or product instructions relevant to your correction.</p></div></section>
+<section class="container content-section"><div class="contact-card" style="max-width:730px"><h2 style="font-family:system-ui,sans-serif;margin-top:0">Editorial contact</h2>{siteConfig.email?<p>Email: <a href={`mailto:${siteConfig.email}`}>{siteConfig.email}</a></p>:<p><strong>Pre-launch setup required:</strong> a monitored contact email has not yet been configured. Add it to <code>site.config.mjs</code> before publishing or applying for advertising.</p>}<p>For corrections, include the page URL, exact claim, product model or location where relevant, and links to supporting official sources or manufacturer instructions. Please do not send passwords, financial account data or other sensitive information.</p><p>We review specific feedback and may correct, clarify, update, or leave a claim unchanged after review. We do not provide individual legal or repair advice by email.</p></div></section>
+</BaseLayout>
