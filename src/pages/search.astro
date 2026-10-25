@@ -1,0 +1,45 @@
+---
+import BaseLayout from '../layouts/BaseLayout.astro';
+import ArticleCard from '../components/ArticleCard.astro';
+import { getCollection } from 'astro:content';
+import { siteConfig } from '../../site.config.mjs';
+const articles = (await getCollection('articles', ({ data }) => !data.draft)).sort((a, b) => b.data.pubDate.valueOf() - a.data.pubDate.valueOf());
+---
+<BaseLayout title="Search articles" description={`Search articles and explainers from ${siteConfig.name}.`} noindex={true}>
+  <section class="page-hero"><div class="container"><p class="section-kicker">Find what you need</p><h1>Search the library.</h1><p>Search article titles, summaries, and topics to find a useful place to start.</p><form class="search-wrap" id="site-search" role="search"><label class="sr-only" for="search-query">Search articles</label><input id="search-query" name="q" type="search" placeholder="Try a topic, question, or keyword…" autocomplete="off" /><button type="submit">Search</button></form></div></section>
+  <section class="container content-section"><p id="search-status" class="search-status" aria-live="polite">Showing all {articles.length} articles.</p>
+    <div class="article-grid" id="search-results">
+      {articles.map((article) => <div class="search-result" data-search-text={`${article.data.title} ${article.data.description} ${article.data.category} ${article.data.tags.join(' ')}`.toLowerCase()}><ArticleCard article={article} /></div>)}
+    </div>
+    <div id="search-empty" class="empty-state" hidden><strong>No matching articles yet.</strong>Try another keyword or browse all <a href="/topics/">topics</a>.</div>
+  </section>
+  <script>
+    const form = document.querySelector('#site-search');
+    const input = document.querySelector('#search-query');
+    const resultItems = [...document.querySelectorAll('.search-result')];
+    const status = document.querySelector('#search-status');
+    const empty = document.querySelector('#search-empty');
+    const filter = (term) => {
+      const query = term.trim().toLowerCase();
+      let count = 0;
+      for (const item of resultItems) {
+        const match = !query || item.dataset.searchText.includes(query);
+        item.hidden = !match;
+        if (match) count++;
+      }
+      status.textContent = query ? `${count} ${count === 1 ? 'article' : 'articles'} match “${term.trim()}”.` : `Showing all ${count} articles.`;
+      empty.hidden = count !== 0;
+    };
+    form?.addEventListener('submit', (event) => {
+      event.preventDefault();
+      filter(input.value);
+      const url = new URL(window.location.href);
+      if (input.value.trim()) url.searchParams.set('q', input.value.trim());
+      else url.searchParams.delete('q');
+      window.history.replaceState({}, '', url);
+    });
+    const initial = new URL(window.location.href).searchParams.get('q') || '';
+    input.value = initial;
+    filter(initial);
+  </script>
+</BaseLayout>
