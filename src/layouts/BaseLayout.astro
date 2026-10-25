@@ -67,6 +67,131 @@ const safeJson = (value) => JSON.stringify(value).replace(/</g, '\\u003c');
       description: siteConfig.authorBio,
       url: new URL('/about/', siteConfig.url).toString(),
     })}></script>
+    <script is:inline>
+      (() => {
+        const viewport = window.matchMedia('(max-width: 767px)');
+        let domReady = document.readyState !== 'loading';
+        let advertisingConsent = false;
+        let busy = false;
+        let activateAgain = false;
+
+        const hasAdvertisingConsent = (detail) => {
+          if (!detail) return false;
+          const categories = detail.categories || {};
+          const accepted = Array.isArray(detail.accepted) ? detail.accepted : [];
+          const granted = categories.advertisement === true || accepted.includes('advertisement');
+          const activeLaw = String(detail.activeLaw || '').toLowerCase();
+          if (activeLaw === 'gdpr' && detail.isUserActionCompleted !== true) return false;
+          return granted;
+        };
+
+        const injectRentSmartAdMarkup = async (container, code) => {
+          const template = document.createElement('template');
+          template.innerHTML = code;
+          const nodes = Array.from(template.content.childNodes);
+
+          // Place non-script elements first so native units can find their target containers.
+          for (const node of nodes) {
+            if (!(node.nodeType === Node.ELEMENT_NODE && node.tagName === 'SCRIPT')) {
+              container.appendChild(node.cloneNode(true));
+            }
+          }
+
+          // Recreate script tags in source order. Await external scripts so each atOptions
+          // configuration is read before another unit can overwrite the shared global.
+          for (const node of nodes) {
+            if (!advertisingConsent) break;
+            if (!(node.nodeType === Node.ELEMENT_NODE && node.tagName === 'SCRIPT')) continue;
+            const script = document.createElement('script');
+            for (const attribute of Array.from(node.attributes)) {
+              script.setAttribute(attribute.name, attribute.value);
+            }
+            script.textContent = node.textContent || '';
+
+            if (node.hasAttribute('src')) {
+              if (!node.hasAttribute('async')) script.async = false;
+              await new Promise((resolve) => {
+                let settled = false;
+                const finish = () => {
+                  if (settled) return;
+                  settled = true;
+                  resolve();
+                };
+                script.addEventListener('load', finish, { once: true });
+                script.addEventListener('error', finish, { once: true });
+                container.appendChild(script);
+              });
+            } else {
+              container.appendChild(script);
+            }
+          }
+        };
+
+        const activateRentSmartAds = async () => {
+          if (!domReady || !advertisingConsent) return;
+          if (busy) {
+            activateAgain = true;
+            return;
+          }
+          busy = true;
+          do {
+            activateAgain = false;
+            const mobile = viewport.matches;
+            const creatives = Array.from(document.querySelectorAll('.ad-slot__creative[data-ad-code]'));
+            for (const creative of creatives) {
+              if (!advertisingConsent) break;
+              if (creative.dataset.adLoaded === 'true' || creative.dataset.adLoaded === 'loading') continue;
+              const slot = creative.closest('.ad-slot');
+              if (!slot) continue;
+              if (slot.classList.contains('ad-slot--desktop-only') && mobile) continue;
+              if (slot.classList.contains('ad-slot--mobile-only') && !mobile) continue;
+              const code = creative.getAttribute('data-ad-code') || '';
+              if (!code.trim() || code.includes('PASTE_ADSTERRA_CODE_HERE')) continue;
+
+              creative.dataset.adLoaded = 'loading';
+              try {
+                await injectRentSmartAdMarkup(creative, code);
+                if (advertisingConsent) creative.dataset.adLoaded = 'true';
+                else {
+                  creative.replaceChildren();
+                  creative.dataset.adLoaded = 'revoked';
+                }
+              } catch {
+                creative.replaceChildren();
+                creative.dataset.adLoaded = 'error';
+              }
+            }
+          } while (activateAgain && advertisingConsent);
+          busy = false;
+        };
+
+        const updateRentSmartAdConsent = (event) => {
+          advertisingConsent = hasAdvertisingConsent(event && event.detail);
+          if (advertisingConsent) {
+            activateRentSmartAds();
+          } else {
+            document.querySelectorAll('.ad-slot__creative[data-ad-loaded="true"], .ad-slot__creative[data-ad-loaded="loading"]').forEach((creative) => {
+              creative.replaceChildren();
+              creative.dataset.adLoaded = 'revoked';
+            });
+          }
+        };
+
+        document.addEventListener('cookieyes_banner_load', updateRentSmartAdConsent);
+        document.addEventListener('cookieyes_consent_update', updateRentSmartAdConsent);
+        if (document.readyState === 'loading') {
+          document.addEventListener('DOMContentLoaded', () => {
+            domReady = true;
+            activateRentSmartAds();
+          }, { once: true });
+        } else {
+          domReady = true;
+          activateRentSmartAds();
+        }
+        if (typeof viewport.addEventListener === 'function') viewport.addEventListener('change', activateRentSmartAds);
+        else viewport.addListener(activateRentSmartAds);
+      })();
+    </script>
     <script id="cookieyes" type="text/javascript" src="https://cdn-cookieyes.com/client_data/0251b4780db20441fc232356/script.js"></script>
     {siteConfig.googleAnalyticsId && (
       <>
