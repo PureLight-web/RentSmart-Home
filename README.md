@@ -84,6 +84,6 @@ This repository setup does **not** itself create or verify external Google Searc
 
 ## Adsterra slots (central code files)
 
-Responsive ad slots are wired into the homepage, article template, and category pages. To activate a unit, open the matching file under src/ads/, remove its placeholder comment, and paste the complete Adsterra code. The reusable component places it in the existing templates; you do not need to edit every page or article.
+Responsive Adsterra units for rentsmartideas.pages.dev are configured in the central files under src/ads/. The reusable component places them in the homepage, article template, and category pages. The shared layout loads Adsterra scripts only after CookieYes reports consent for the Advertisement category and only for the active desktop/mobile variant.
 
-See src/ads/README.md for the size-to-file map and placements. Codes are site/unit-specific, so use the code supplied for RentSmart Home.
+See src/ads/README.md for the size-to-file map, placements, and consent behavior. Codes are site/unit-specific; do not reuse these site IDs on unrelated sites.
