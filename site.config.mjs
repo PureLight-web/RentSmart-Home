@@ -5,7 +5,7 @@ export const siteConfig = {
   tagline: "Make your rental feel like home.",
   topic: "Practical, reversible upgrades and evidence-led advice for renters.",
   description: "Renter-friendly upgrades, no-drill storage, removable decor, move-in checklists, and practical ways to protect your rental deposit.",
-  url: "https://rentsmart-home.pages.dev",
+  url: "https://rentsmartideas.pages.dev",
   language: "en",
   author: "Pure Light",
   authorBio: "Pure Light is an independent publisher focused on practical, budget-aware guidance for renters. RentSmart Home distinguishes manufacturer instructions from hands-on testing and flags advice that depends on the surface, product, lease, or location.",
