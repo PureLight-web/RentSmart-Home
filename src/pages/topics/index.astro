@@ -1,0 +1,19 @@
+---
+import BaseLayout from '../../layouts/BaseLayout.astro';
+import { getCollection } from 'astro:content';
+import { slugify } from '../../lib/site';
+const articles = await getCollection('articles', ({ data }) => !data.draft);
+const grouped = [...new Set(articles.map((article) => article.data.category))].map((category, i) => ({
+  category,
+  count: articles.filter((article) => article.data.category === category).length,
+  slug: slugify(category),
+  icon: ['✳','↗','◎','⌁','◈','◌'][i % 6],
+}));
+---
+<BaseLayout title="Explore topics" description="Browse all topics and practical explainers.">
+  <section class="page-hero"><div class="container"><p class="section-kicker">A map for curious minds</p><h1>Explore topics.</h1><p>Pick a subject to find clear explainers, helpful context, and articles that make the bigger picture easier to understand.</p></div></section>
+  <section class="container content-section"><div class="topic-grid">
+    {grouped.map((item) => <a class="topic-card" href={`/category/${item.slug}/`}><span class="topic-icon" aria-hidden="true">{item.icon}</span><h3>{item.category}</h3><p>{item.count} {item.count === 1 ? 'article' : 'articles'} to explore</p></a>)}
+    {grouped.length === 0 && <div class="empty-state"><strong>No topics published yet.</strong>Add an article and set its <code>category</code> in the frontmatter.</div>}
+  </div></section>
+</BaseLayout>
