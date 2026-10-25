@@ -1,0 +1,13 @@
+---
+import BaseLayout from '../layouts/BaseLayout.astro';
+import { siteConfig } from '../../site.config.mjs';
+---
+<BaseLayout title="Terms of use" description={`Terms for using ${siteConfig.name} practical renter guides.`}>
+<section class="page-hero"><div class="container"><p class="section-kicker">Using the site</p><h1>Terms of use.</h1><p>Read these limitations alongside your lease, product instructions and local rules.</p></div></section>
+<section class="container content-section"><div class="prose"><p><strong>Review note:</strong> These general terms are a template, not legal advice. Review them against the actual website operator and applicable law.</p>
+<h2>Informational content only</h2><p>{siteConfig.name} provides general educational and practical information. Articles are not personalised legal advice, professional construction or electrical advice, or a guarantee that a product or method is safe or damage-free in your rental.</p>
+<h2>Verify your circumstances</h2><p>Read your tenancy agreement, check local law, inspect the actual surface and follow the current manufacturer's instructions. Product models, load ratings, finishes, building conditions and tenancy rules vary. Do not rely on a general article for an urgent safety concern or legal dispute.</p>
+<h2>Accuracy and availability</h2><p>We aim to keep information useful, but errors, omissions, product changes and legal changes can occur. We do not guarantee uninterrupted availability or that every page is current for every location.</p>
+<h2>Content and third-party links</h2><p>You may link to our pages and quote brief passages with appropriate attribution where permitted by law. Do not republish substantial content or images without permission. Third-party links are provided for reference and do not necessarily imply endorsement.</p>
+<h2>Limitations and updates</h2><p>To the extent permitted by applicable law, use of general information is at your discretion and risk. Nothing here excludes a right or liability that cannot lawfully be excluded. We may update these terms as the site changes. Contact details should be shown on the <a href="/contact/">Contact page</a>.</p></div></section>
+</BaseLayout>
