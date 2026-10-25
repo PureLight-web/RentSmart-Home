@@ -22,12 +22,21 @@ const articleSchema = {
   '@context': 'https://schema.org', '@type': 'Article', headline: data.title,
   description: data.description, datePublished: data.pubDate.toISOString(),
   dateModified: (data.updatedDate || data.pubDate).toISOString(), mainEntityOfPage: canonical,
-  author: { '@type': authorName.toLowerCase().includes('team') ? 'Organization' : 'Person', name: authorName }, publisher: { '@type': 'Organization', name: siteConfig.name, url: siteConfig.url },
+  author: { '@type': 'Person', name: authorName, description: authorName === siteConfig.author ? siteConfig.authorBio : undefined, url: absoluteUrl('/about/', siteConfig.url) }, publisher: { '@type': 'Organization', name: siteConfig.name, url: siteConfig.url, logo: absoluteUrl('/favicon.svg', siteConfig.url) },
   image: socialImage, articleSection: data.category, inLanguage: siteConfig.language,
 };
+const faqSchema = data.faqs?.length ? {
+  '@context': 'https://schema.org',
+  '@type': 'FAQPage',
+  mainEntity: data.faqs.map((faq) => ({
+    '@type': 'Question',
+    name: faq.question,
+    acceptedAnswer: { '@type': 'Answer', text: faq.answer },
+  })),
+} : null;
 ---
 <BaseLayout title={data.seoTitle || data.title} description={data.description} canonical={canonical} image={data.heroImage || siteConfig.defaultOgImage} type="article" noindex={data.noindex}>
-  <Fragment slot="head"><script type="application/ld+json" set:html={safeJson(articleSchema)}></script><script type="application/ld+json" set:html={safeJson({ '@context': 'https://schema.org', '@type': 'BreadcrumbList', itemListElement: [ { '@type': 'ListItem', position: 1, name: siteConfig.name, item: siteConfig.url }, { '@type': 'ListItem', position: 2, name: data.category, item: absoluteUrl(`/category/${slugify(data.category)}/`, siteConfig.url) }, { '@type': 'ListItem', position: 3, name: data.title, item: canonical } ] })}></script></Fragment>
+  <Fragment slot="head"><script type="application/ld+json" set:html={safeJson(articleSchema)}></script><script type="application/ld+json" set:html={safeJson({ '@context': 'https://schema.org', '@type': 'BreadcrumbList', itemListElement: [ { '@type': 'ListItem', position: 1, name: siteConfig.name, item: siteConfig.url }, { '@type': 'ListItem', position: 2, name: data.category, item: absoluteUrl(`/category/${slugify(data.category)}/`, siteConfig.url) }, { '@type': 'ListItem', position: 3, name: data.title, item: canonical } ] })}></script>{faqSchema && <script type="application/ld+json" set:html={safeJson(faqSchema)}></script>}</Fragment>
   <section class="container content-section">
     <div class="breadcrumbs"><a href="/">Home</a><span>›</span><a href="/topics/">Topics</a><span>›</span><a href={`/category/${slugify(data.category)}/`}>{data.category}</a></div>
     <div class="article-layout">
@@ -40,6 +49,12 @@ const articleSchema = {
         </header>
         {data.heroImage && <img class="article-cover" src={data.heroImage} alt={data.heroImageAlt || ''} fetchpriority="high" />}
         <div class="prose article-prose"><Content /></div>
+        <section class="side-card author-box" aria-label="About the author" style="margin-top:28px">
+          <h2>About the author</h2>
+          <p><strong>{authorName}</strong></p>
+          <p>{authorName === siteConfig.author ? siteConfig.authorBio : 'This article is published by RentSmart Home. See our About page for the editorial approach.'}</p>
+          <p><a href="/about/">Our editorial approach →</a></p>
+        </section>
         {data.tags?.length > 0 && <div class="tag-list" aria-label="Article tags">{data.tags.map((tag) => <span class="tag">{tag}</span>)}</div>}
         <div class="article-end"><strong>Want to explore further?</strong><p>Read more explainers in {data.category}, or learn how this site approaches research and corrections.</p><a class="text-link" href={`/category/${slugify(data.category)}/`}>More in {data.category} <span aria-hidden="true">→</span></a></div>
       </article>
