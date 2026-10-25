@@ -1,0 +1,15 @@
+---
+import BaseLayout from '../layouts/BaseLayout.astro';
+import { siteConfig } from '../../site.config.mjs';
+---
+<BaseLayout title="About RentSmart Home" description="The mission and editorial approach behind RentSmart Home's practical rental improvement guides.">
+<section class="page-hero"><div class="container"><p class="section-kicker">A renter-first approach</p><h1>Make it feel like yours—without guessing what it might cost later.</h1><p>{siteConfig.description}</p></div></section>
+<section class="container content-section"><div class="prose">
+<h2>Why RentSmart Home exists</h2><p>Renters should not have to choose between a comfortable home and being careful with a deposit. RentSmart Home covers renter-friendly lighting, removable decor, no-drill storage, small-space organisation, move-in records and move-out preparation. We explain where a project may work, where it may fail, and what to check first.</p>
+<h2>Publisher and author</h2><p><strong>{siteConfig.author}</strong> is an independent publisher focused on practical, budget-aware guidance for renters. The site distinguishes manufacturer instructions from hands-on testing and flags advice that depends on the surface, product, lease or location. We do not claim specialist qualifications or personal product testing unless explicitly documented.</p>
+<p>Project guides should be enhanced with original photos, real measurements, itemised costs and removal observations when those have actually been collected. We never present a planned test as a completed one.</p>
+<h2>How our reversibility score works</h2><p>Each project uses a 1–5 planning score. A score of 1 means the change is difficult to reverse or may need permission and repair; 5 means it is usually easier to remove when correctly installed on a suitable surface. This is a comparative aid, not a damage-free guarantee. Paint type, plaster condition, humidity, product age, load and removal technique all matter.</p>
+<h2>Research standards</h2><ul><li>Use current manufacturer instructions for weight limits, compatibility, installation and removal.</li><li>Check tenancy agreements and official, jurisdiction-specific guidance before discussing alterations.</li><li>Label cost estimates with their currency, location and assumptions.</li><li>Do not invent test results, credentials, data, endorsements or quotations.</li><li>Correct material errors and update content when products or rules change.</li></ul>
+<h2>What this site is not</h2><p>RentSmart Home is not a law firm, building contractor or electrician. US rules vary by state and locality; the UK tenancy guide focuses on England and should not automatically be applied to Scotland, Wales or Northern Ireland. Consult an appropriately qualified professional for electrical, structural, fire-safety, damp, mould or legal-dispute matters.</p>
+<h2>Contact and corrections</h2><p>See the <a href="/contact/">Contact page</a> and <a href="/sources/">Sources &amp; corrections policy</a>. A monitored contact email must be configured before launch.</p>
+</div></section></BaseLayout>
