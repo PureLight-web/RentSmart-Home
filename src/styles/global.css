@@ -22,8 +22,10 @@
 .ad-slot--banner-300x250 .ad-slot__creative{max-width:300px;min-height:250px}
 .ad-slot--banner-160x300 .ad-slot__creative{max-width:160px;min-height:300px}
 .ad-slot--banner-160x600 .ad-slot__creative{max-width:160px;min-height:600px}
-.ad-slot--banner-320x50 .ad-slot__creative{max-width:320px;min-height:50px}
+.ad-slot--banner-320x50{width:100%;padding-inline:0}
+.ad-slot--banner-320x50 .ad-slot__creative{width:min(320px,100%);max-width:320px;min-height:50px}
 .ad-slot--banner-728x90 .ad-slot__creative{max-width:728px;min-height:90px}
+.ad-slot--responsive{display:flex}
 .ad-slot--desktop-only{display:flex}
 .ad-slot--mobile-only{display:flex}
 .category-layout{display:grid;grid-template-columns:minmax(0,1fr) 190px;gap:28px;align-items:start}
