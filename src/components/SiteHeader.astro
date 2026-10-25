@@ -1,0 +1,25 @@
+---
+import { siteConfig } from '../../site.config.mjs';
+const currentPath = Astro.url.pathname;
+---
+<header class="site-header">
+  <div class="container header-inner">
+    <a class="brand" href="/" aria-label={`${siteConfig.name} home`}>
+      <span class="brand-mark" aria-hidden="true">{siteConfig.logoText}</span>
+      <span class="brand-name">{siteConfig.name}<small>{siteConfig.tagline}</small></span>
+    </a>
+    <nav class="desktop-nav" aria-label="Main navigation">
+      {siteConfig.navigation.map((item) => (
+        <a href={item.href} class:list={[{ active: currentPath === item.href }]}>{item.label}</a>
+      ))}
+      <a class="nav-search" href="/search/" aria-label="Search the site"><svg viewBox="0 0 24 24" aria-hidden="true"><circle cx="10.8" cy="10.8" r="6.8"></circle><path d="m16 16 5 5"></path></svg></a>
+    </nav>
+    <details class="mobile-nav">
+      <summary aria-label="Open navigation"><span></span><span></span><span></span></summary>
+      <nav aria-label="Mobile navigation">
+        {siteConfig.navigation.map((item) => <a href={item.href}>{item.label}</a>)}
+        <a href="/search/">Search</a>
+      </nav>
+    </details>
+  </div>
+</header>
