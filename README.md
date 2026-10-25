@@ -4,7 +4,7 @@
 
 ## Tech stack and hosting
 - Astro static site, GitHub source repository, **Cloudflare Pages** deployment (not Workers).
-- Node.js 22; build command: `npm run build`; output directory: `dist`; root directory: repository root.
+- Node.js 22.23.4 or newer 22.x; build command: `npm run build`; output directory: `dist`; root directory: repository root.
 - Articles: `src/content/articles/*.md`.
 - Branding/IDs/domain: `site.config.mjs`.
 - Canonical is set to the deployed Pages hostname `https://rentsmartideas.pages.dev`.
@@ -75,7 +75,7 @@ Before expanding a cluster, validate terms in Google autocomplete, People Also A
 2. Build command: `npm run build`.
 3. Build output directory: `dist`.
 4. Root directory: repository root.
-5. Set Node.js to 22 where the build environment exposes that option.
+5. Use Node.js 22.23.4 or newer 22.x (the repository `.nvmrc` pins 22.23.4) where the build environment exposes that option.
 6. Deploy the `main` branch and verify the Pages hostname, homepage, article URL, `/sitemap.xml`, `/robots.txt`, `/rss.xml` and an invalid URL/404.
 
 ## Important pre-launch limitations
