@@ -51,6 +51,22 @@ const safeJson = (value) => JSON.stringify(value).replace(/</g, '\\u003c');
       inLanguage: siteConfig.language,
       publisher: { '@type': 'Organization', name: siteConfig.name, url: siteConfig.url },
     })}></script>
+    <script type="application/ld+json" set:html={safeJson({
+      '@context': 'https://schema.org',
+      '@type': 'Organization',
+      name: siteConfig.name,
+      url: siteConfig.url,
+      logo: new URL('/favicon.svg', siteConfig.url).toString(),
+      email: siteConfig.email || undefined,
+      founder: { '@type': 'Person', name: siteConfig.author, description: siteConfig.authorBio },
+    })}></script>
+    <script type="application/ld+json" set:html={safeJson({
+      '@context': 'https://schema.org',
+      '@type': 'Person',
+      name: siteConfig.author,
+      description: siteConfig.authorBio,
+      url: new URL('/about/', siteConfig.url).toString(),
+    })}></script>
     {siteConfig.googleAnalyticsId && (
       <>
         <script async src={`https://www.googletagmanager.com/gtag/js?id=${siteConfig.googleAnalyticsId}`}></script>
