@@ -67,6 +67,7 @@ const safeJson = (value) => JSON.stringify(value).replace(/</g, '\\u003c');
       description: siteConfig.authorBio,
       url: new URL('/about/', siteConfig.url).toString(),
     })}></script>
+    <script id="cookieyes" type="text/javascript" src="https://cdn-cookieyes.com/client_data/0251b4780db20441fc232356/script.js"></script>
     {siteConfig.googleAnalyticsId && (
       <>
         <script async src={`https://www.googletagmanager.com/gtag/js?id=${siteConfig.googleAnalyticsId}`}></script>
