@@ -27,17 +27,18 @@ const selected = definitions[slot];
 const desktopCode = selected?.desktop || '';
 const mobileCode = selected?.mobile || '';
 const hasCode = Boolean(desktopCode || mobileCode);
+const isResponsiveSlot = slot === 'native-banner' || slot === 'banner-300x250';
 ---
 
 {hasCode && (
   <>
     {desktopCode && (
       <aside
-        class:list={['ad-slot', 'ad-slot--' + slot, 'ad-place--' + placement, 'ad-slot--desktop-only']}
+        class:list={['ad-slot', 'ad-slot--' + slot, 'ad-place--' + placement, isResponsiveSlot ? 'ad-slot--responsive' : 'ad-slot--desktop-only']}
         aria-label="Advertisement"
       >
         <span class="ad-slot__label">Advertisement</span>
-        <div class="ad-slot__creative" set:html={desktopCode}></div>
+        <div class="ad-slot__creative" data-ad-code={desktopCode}></div>
       </aside>
     )}
     {mobileCode && (
@@ -46,7 +47,7 @@ const hasCode = Boolean(desktopCode || mobileCode);
         aria-label="Advertisement"
       >
         <span class="ad-slot__label">Advertisement</span>
-        <div class="ad-slot__creative" set:html={mobileCode}></div>
+        <div class="ad-slot__creative" data-ad-code={mobileCode}></div>
       </aside>
     )}
   </>
