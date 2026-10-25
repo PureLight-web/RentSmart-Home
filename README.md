@@ -80,3 +80,10 @@ Before expanding a cluster, validate terms in Google autocomplete, People Also A
 
 ## Important pre-launch limitations
 This repository setup does **not** itself create or verify external Google Search Console, GA4, AdSense, affiliate or CMP accounts and does not edit domain DNS. Those steps need the owner's account access and actual IDs. Article pages currently use abstract CSS card artwork unless an original article image is supplied. Add licensed/owned, descriptive images and genuine firsthand evidence before the site is considered ready for an ads review.
+
+
+## Adsterra slots (central code files)
+
+Responsive ad slots are wired into the homepage, article template, and category pages. To activate a unit, open the matching file under src/ads/, remove its placeholder comment, and paste the complete Adsterra code. The reusable component places it in the existing templates; you do not need to edit every page or article.
+
+See src/ads/README.md for the size-to-file map and placements. Codes are site/unit-specific, so use the code supplied for RentSmart Home.

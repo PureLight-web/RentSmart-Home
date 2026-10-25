@@ -3,6 +3,7 @@ import BaseLayout from '../../layouts/BaseLayout.astro';
 import ArticleCard from '../../components/ArticleCard.astro';
 import { getCollection } from 'astro:content';
 import { slugify } from '../../lib/site';
+import AdSlot from '../../components/AdSlot.astro';
 
 export async function getStaticPaths() {
   const articles = await getCollection('articles', ({ data }) => !data.draft);
@@ -14,7 +15,27 @@ const articles = (await getCollection('articles', ({ data }) => !data.draft && d
 ---
 <BaseLayout title={category} description={`Explore ${category} articles and explainers.`}>
   <section class="page-hero"><div class="container"><div class="breadcrumbs"><a href="/">Home</a><span>›</span><a href="/topics/">Topics</a><span>›</span><span>{category}</span></div><p class="section-kicker">Topic collection</p><h1>{category}.</h1><p>Explore the latest explainers, background guides, and practical knowledge in {category.toLowerCase()}.</p></div></section>
-  <section class="container content-section"><div class="section-head"><div><p class="section-kicker">The collection</p><h2 class="section-title">{articles.length} {articles.length === 1 ? 'article' : 'articles'}</h2></div></div>
-    {articles.length ? <div class="article-grid">{articles.map((article) => <ArticleCard article={article} />)}</div> : <div class="empty-state"><strong>No published articles in this topic.</strong>Add Markdown content in <code>src/content/articles/</code>.</div>}
+  <AdSlot slot="banner-468x60" placement="category-intro" />
+  <section class="container content-section category-layout">
+    <div class="category-main">
+      <div class="section-head"><div><p class="section-kicker">The collection</p><h2 class="section-title">{articles.length} {articles.length === 1 ? 'article' : 'articles'}</h2></div></div>
+      {articles.length ? (
+        <div class="article-grid category-article-grid">
+          {articles.map((article, index) => (
+            <Fragment>
+              <ArticleCard article={article} />
+              {index === 2 && articles.length >= 4 && <AdSlot slot="banner-300x250" placement="category-inline" />}
+            </Fragment>
+          ))}
+        </div>
+      ) : (
+        <div class="empty-state"><strong>No published articles in this topic.</strong>Add Markdown content in <code>src/content/articles/</code>.</div>
+      )}
+      {articles.length > 0 && articles.length < 4 && <AdSlot slot="banner-300x250" placement="category-after-list" />}
+    </div>
+    <aside class="category-sidebar" aria-label="Topic sidebar">
+      <AdSlot slot="banner-160x300" placement="category-sidebar" />
+      <div class="side-card"><h2>Explore thoughtfully</h2><p>Start with a useful question, follow the evidence, and use source links to dig deeper into a topic.</p><p style="margin-top:12px"><a href="/editorial-policy/">Our editorial standards →</a></p></div>
+    </aside>
   </section>
 </BaseLayout>

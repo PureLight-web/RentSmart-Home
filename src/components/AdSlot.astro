@@ -1,0 +1,53 @@
+---
+import nativeDesktopRaw from '../ads/native-banner.desktop.html?raw';
+import nativeMobileRaw from '../ads/native-banner.mobile.html?raw';
+import banner468DesktopRaw from '../ads/banner-468x60.desktop.html?raw';
+import banner300DesktopRaw from '../ads/banner-300x250.desktop.html?raw';
+import banner300MobileRaw from '../ads/banner-300x250.mobile.html?raw';
+import banner160x300DesktopRaw from '../ads/banner-160x300.desktop.html?raw';
+import banner160x600DesktopRaw from '../ads/banner-160x600.desktop.html?raw';
+import banner320MobileRaw from '../ads/banner-320x50.mobile.html?raw';
+import banner728DesktopRaw from '../ads/banner-728x90.desktop.html?raw';
+
+const cleanCode = (source) =>
+  source.includes('PASTE_ADSTERRA_CODE_HERE') ? '' : source.trim();
+
+const definitions = {
+  'native-banner': { desktop: cleanCode(nativeDesktopRaw), mobile: cleanCode(nativeMobileRaw) },
+  'banner-468x60': { desktop: cleanCode(banner468DesktopRaw), mobile: '' },
+  'banner-300x250': { desktop: cleanCode(banner300DesktopRaw), mobile: cleanCode(banner300MobileRaw) },
+  'banner-160x300': { desktop: cleanCode(banner160x300DesktopRaw), mobile: '' },
+  'banner-160x600': { desktop: cleanCode(banner160x600DesktopRaw), mobile: '' },
+  'banner-320x50': { desktop: '', mobile: cleanCode(banner320MobileRaw) },
+  'banner-728x90': { desktop: cleanCode(banner728DesktopRaw), mobile: '' },
+};
+
+const { slot, placement = 'content' } = Astro.props;
+const selected = definitions[slot];
+const desktopCode = selected?.desktop || '';
+const mobileCode = selected?.mobile || '';
+const hasCode = Boolean(desktopCode || mobileCode);
+---
+
+{hasCode && (
+  <>
+    {desktopCode && (
+      <aside
+        class:list={['ad-slot', 'ad-slot--' + slot, 'ad-place--' + placement, 'ad-slot--desktop-only']}
+        aria-label="Advertisement"
+      >
+        <span class="ad-slot__label">Advertisement</span>
+        <div class="ad-slot__creative" set:html={desktopCode}></div>
+      </aside>
+    )}
+    {mobileCode && (
+      <aside
+        class:list={['ad-slot', 'ad-slot--' + slot, 'ad-place--' + placement, 'ad-slot--mobile-only']}
+        aria-label="Advertisement"
+      >
+        <span class="ad-slot__label">Advertisement</span>
+        <div class="ad-slot__creative" set:html={mobileCode}></div>
+      </aside>
+    )}
+  </>
+)}

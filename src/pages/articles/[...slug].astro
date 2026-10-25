@@ -4,6 +4,7 @@ import ArticleCard from '../../components/ArticleCard.astro';
 import { getCollection, render } from 'astro:content';
 import { siteConfig } from '../../../site.config.mjs';
 import { absoluteUrl, formatDate, slugify } from '../../lib/site';
+import AdSlot from '../../components/AdSlot.astro';
 
 export async function getStaticPaths() {
   const articles = await getCollection('articles', ({ data }) => !data.draft);
@@ -47,6 +48,7 @@ const faqSchema = data.faqs?.length ? {
           <p class="article-deck">{data.description}</p>
           <div class="article-byline"><span>By <strong>{authorName}</strong></span>{data.updatedDate && <><span aria-hidden="true">·</span><span>Updated {formatDate(data.updatedDate)}</span></>}</div>
         </header>
+        <AdSlot slot="native-banner" placement="article-after-heading" />
         {data.heroImage && <img class="article-cover" src={data.heroImage} alt={data.heroImageAlt || ''} fetchpriority="high" />}
         <div class="prose article-prose"><Content /></div>
         <section class="side-card author-box" aria-label="About the author" style="margin-top:28px">
@@ -56,10 +58,12 @@ const faqSchema = data.faqs?.length ? {
           <p><a href="/about/">Our editorial approach →</a></p>
         </section>
         {data.tags?.length > 0 && <div class="tag-list" aria-label="Article tags">{data.tags.map((tag) => <span class="tag">{tag}</span>)}</div>}
+        <AdSlot slot="banner-300x250" placement="article-after-content" />
         <div class="article-end"><strong>Want to explore further?</strong><p>Read more explainers in {data.category}, or learn how this site approaches research and corrections.</p><a class="text-link" href={`/category/${slugify(data.category)}/`}>More in {data.category} <span aria-hidden="true">→</span></a></div>
       </article>
       <aside class="article-sidebar" aria-label="Related information">
         <div class="side-card"><h2>In this article</h2>{headings.length ? <nav>{headings.filter((heading) => heading.depth === 2).map((heading) => <p><a href={`#${heading.slug}`}>{heading.text}</a></p>)}</nav> : <p>Use the headings to navigate this guide.</p>}</div>
+        <AdSlot slot="banner-160x600" placement="article-sidebar" />
         <div class="side-card"><h2>Our approach</h2><p>We aim to separate established facts from interpretation, explain important limits, and link readers to useful primary sources.</p><p style="margin-top:12px"><a href="/editorial-policy/">Read our editorial policy →</a></p></div>
         <div class="side-card"><h2>Corrections?</h2><p>Found an error or a source that needs updating? Let our editors know.</p><p style="margin-top:12px"><a href="/sources/">Sources &amp; corrections →</a></p></div>
       </aside>
