@@ -6,36 +6,76 @@ import { slugify } from '../../lib/site';
 import AdSlot from '../../components/AdSlot.astro';
 
 export async function getStaticPaths() {
-  const articles = await getCollection('articles', ({ data }) => !data.draft);
+  const articles = await getCollection('articles', ({ data }) => !data.draft && !data.noindex);
   const categories = [...new Set(articles.map((article) => article.data.category))];
   return categories.map((category) => ({ params: { slug: slugify(category) }, props: { category } }));
 }
 const { category } = Astro.props;
-const articles = (await getCollection('articles', ({ data }) => !data.draft && data.category === category)).sort((a, b) => b.data.pubDate.valueOf() - a.data.pubDate.valueOf());
+const articles = (await getCollection('articles', ({ data }) => !data.draft && !data.noindex && data.category === category))
+  .sort((a, b) => b.data.pubDate.valueOf() - a.data.pubDate.valueOf());
+
+const categorySeo = {
+  'Renter-Friendly Upgrades': {
+    title: 'Renter-Friendly Home Upgrades & Removable Decor',
+    description: 'Explore renter-friendly bathroom upgrades, removable wallpaper, low-damage decorating ideas, and practical checks before you change a rental.',
+    heading: 'Renter-Friendly Home Upgrades',
+    intro: 'Make a rental more comfortable while respecting your lease and planning for move-out. Check product instructions, surface compatibility, permission, and a realistic removal plan before starting.',
+    related: ['Walls, Floors & Storage', 'Move-In & Move-Out', 'Tenancy Rules & Deposits'],
+  },
+  'Walls, Floors & Storage': {
+    title: 'No-Drill Shelves, Rental Flooring & Small-Space Storage',
+    description: 'Find no-drill shelving ideas, storage for bedrooms without closets, temporary room dividers, and removable flooring options for renters.',
+    heading: 'Walls, Floors & Storage for Renters',
+    intro: 'Find ways to organise a rental without assuming that every adhesive, wall finish, or temporary floor product will remove without damage.',
+    related: ['Renter-Friendly Upgrades', 'Move-In & Move-Out', 'Tenancy Rules & Deposits'],
+  },
+  'Move-In & Move-Out': {
+    title: 'Rental Move-In & Move-Out Checklists',
+    description: 'Use renter move-in condition, deposit-protection and move-out cleaning checklists to document your home and prepare for handover.',
+    heading: 'Move-In & Move-Out Checklists',
+    intro: 'Build a clear record of the property condition, report existing faults promptly, and prepare a practical cleaning and documentation plan for handover.',
+    related: ['Tenancy Rules & Deposits', 'Renter-Friendly Upgrades', 'Walls, Floors & Storage'],
+  },
+  'Lighting & Smart Home': {
+    title: 'Plug-In Lighting & Smart Home Ideas for Renters',
+    description: 'Compare plug-in sconces, lighting swaps and budget smart-home setups that avoid unauthorised rewiring or permanent changes.',
+    heading: 'Lighting & Smart Home for Renters',
+    intro: 'Improve convenience with portable or plug-in devices while protecting safety equipment, respecting privacy, and checking permission when a change attaches to the building.',
+    related: ['Renter-Friendly Upgrades', 'Tenancy Rules & Deposits', 'Walls, Floors & Storage'],
+  },
+  'Tenancy Rules & Deposits': {
+    title: 'Rental Permission, Decorating Rules & Deposit Guides',
+    description: 'Learn what to check before painting or changing a rental, how to request written landlord permission, and how to document your deposit condition.',
+    heading: 'Tenancy Rules, Permission & Deposits',
+    intro: 'Rules depend on your agreement and location. Use written approvals, dated condition records, and current official local guidance rather than assumptions about renter-friendly products.',
+    related: ['Move-In & Move-Out', 'Renter-Friendly Upgrades', 'Walls, Floors & Storage'],
+  },
+};
+const seo = categorySeo[category] || {
+  title: category,
+  description: 'Browse ' + category.toLowerCase() + ' ideas and practical guides for renters.',
+  heading: category,
+  intro: 'Explore practical renter-friendly guides about ' + category.toLowerCase() + '.',
+  related: [],
+};
+const relatedCategories = seo.related.map((name) => ({ name, slug: slugify(name) }));
 ---
-<BaseLayout title={category} description={`Explore ${category} articles and explainers.`}>
-  <section class="page-hero"><div class="container"><div class="breadcrumbs"><a href="/">Home</a><span>›</span><a href="/topics/">Topics</a><span>›</span><span>{category}</span></div><p class="section-kicker">Topic collection</p><h1>{category}.</h1><p>Explore the latest explainers, background guides, and practical knowledge in {category.toLowerCase()}.</p></div></section>
+<BaseLayout title={seo.title} description={seo.description}>
+  <section class="page-hero"><div class="container">
+    <div class="breadcrumbs"><a href="/">Home</a><span>›</span><a href="/topics/">Topics</a><span>›</span><span>{category}</span></div>
+    <p class="section-kicker">Topic collection</p><h1>{seo.heading}</h1><p>{seo.intro}</p>
+  </div></section>
   <AdSlot slot="banner-468x60" placement="category-intro" />
   <section class="container content-section category-layout">
     <div class="category-main">
       <div class="section-head"><div><p class="section-kicker">The collection</p><h2 class="section-title">{articles.length} {articles.length === 1 ? 'article' : 'articles'}</h2></div></div>
-      {articles.length ? (
-        <div class="article-grid category-article-grid">
-          {articles.map((article, index) => (
-            <Fragment>
-              <ArticleCard article={article} />
-              {index === 2 && articles.length >= 4 && <AdSlot slot="banner-300x250" placement="category-inline" />}
-            </Fragment>
-          ))}
-        </div>
-      ) : (
-        <div class="empty-state"><strong>No published articles in this topic.</strong>Add Markdown content in <code>src/content/articles/</code>.</div>
-      )}
+      {articles.length ? <div class="article-grid category-article-grid">{articles.map((article, index) => <Fragment><ArticleCard article={article} />{index === 2 && articles.length >= 4 && <AdSlot slot="banner-300x250" placement="category-inline" />}</Fragment>)}</div> : <div class="empty-state"><strong>No published articles in this topic.</strong> Add Markdown content in <code>src/content/articles/</code>.</div>}
       {articles.length > 0 && articles.length < 4 && <AdSlot slot="banner-300x250" placement="category-after-list" />}
     </div>
     <aside class="category-sidebar" aria-label="Topic sidebar">
       <AdSlot slot="banner-160x300" placement="category-sidebar" />
-      <div class="side-card"><h2>Explore thoughtfully</h2><p>Start with a useful question, follow the evidence, and use source links to dig deeper into a topic.</p><p style="margin-top:12px"><a href="/editorial-policy/">Our editorial standards →</a></p></div>
+      <div class="side-card"><h2>Related topics</h2><ul>{relatedCategories.map((item) => <li><a href={'/category/' + item.slug + '/'}>{item.name}</a></li>)}</ul></div>
+      <div class="side-card"><h2>Plan for move-out</h2><p>Check your agreement, use product-specific removal instructions, and document the surface before and after a project. “Removable” is not a guarantee of damage-free removal.</p><p style="margin-top:12px"><a href="/articles/move-in-condition-checklist-protect-deposit/">Protect your deposit with a condition checklist →</a></p></div>
     </aside>
   </section>
 </BaseLayout>
